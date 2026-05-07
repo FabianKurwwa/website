@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabian - Mijn eerste website</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="stars-canvas"></canvas>
+
+    <div class="container">
+        <div id="introduction" class="section">
+            <h1>Over mezelf</h1>
+            <h3>Introductie</h3>
+            <p>Hallo, mijn naam is Fabian. Ik ben 19 jaar oud en woon in Terneuzen. Ik heb 2 zussen en een hond.</p>
+        </div>
+        <div id="hobbies" class="section">
+            <h1>Hobby en interessen</h1>
+            <p>Mijn hobby is gamen, want het is leuk om samen met vrienden te spelen. Mijn interesse is coderen, omdat het me leuk lijkt om mijn eigen dingen te bouwen, zoals games, applicaties of websites.</p>
+        </div>
+    </div>
+
+    <script>
+        // Canvas setup
+        const canvas = document.getElementById('stars-canvas');
+        const ctx = canvas.getContext('2d');
+        const shootingStars = [];
+
+        // Resize canvas to fit window
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Create a new shooting star
+        function createShootingStar() {
+            return {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height * 0.5,
+                length: Math.random() * 150 + 50,
+                speed: Math.random() * 6 + 4,
+                opacity: 1,
+                angle: Math.PI / 4
+            };
+        }
+
+        // Draw and animate shooting stars
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (Math.random() < 0.03) {
+                shootingStars.push(createShootingStar());
+            }
+
+            for (let i = shootingStars.length - 1; i >= 0; i--) {
+                const star = shootingStars[i];
+                const endX = star.x - Math.cos(star.angle) * star.length;
+                const endY = star.y - Math.sin(star.angle) * star.length;
+
+                // Create gradient for star trail
+                const gradient = ctx.createLinearGradient(star.x, star.y, endX, endY);
+                gradient.addColorStop(0, `rgba(255, 255, 255, ${star.opacity})`);
+                gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+                // Draw star
+                ctx.beginPath();
+                ctx.moveTo(star.x, star.y);
+                ctx.lineTo(endX, endY);
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Update star position and opacity
+                star.x += star.speed;
+                star.y += star.speed;
+                star.opacity -= 0.02;
+
+                // Remove star if fully faded
+                if (star.opacity <= 0) {
+                    shootingStars.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

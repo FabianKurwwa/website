@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  background-color: lightblue;
+  font-family: Arial, sans-serif;
+  color: #102027;
+  background-image: url("images/wp5569646.jpg"); /* of "images/background.jpg" */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.section {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(16, 32, 39, 0.08);
+}
+
+h1 {
+  margin-bottom: 8px;
+  font-size: 1.6rem;
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+p {
+  line-height: 1.7;
+  font-size: 1.1rem;
+}
+
+#stars-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+}
