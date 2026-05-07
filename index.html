@@ -13,81 +13,174 @@
         <div id="introduction" class="section">
             <h1>Over mezelf</h1>
             <h3>Introductie</h3>
-            <p>Hallo, mijn naam is Fabian. Ik ben 19 jaar oud en woon in Terneuzen. Ik heb 2 zussen en een hond.</p>
+            <p>Hallo, mijn naam is Fabian. Ik ben 19 jaar oud en woon in Terneuzen. Ik loop school op Scalda, en ik volg de studie Software Development (nog niet officieel).</p>
         </div>
         <div id="hobbies" class="section">
             <h1>Hobby en interessen</h1>
-            <p>Mijn hobby is gamen, want het is leuk om samen met vrienden te spelen. Mijn interesse is coderen, omdat het me leuk lijkt om mijn eigen dingen te bouwen, zoals games, applicaties of websites. bla bla bla</p>
+            <p>Mijn hobby is gamen, want het is leuk om samen met vrienden te spelen. Mijn interesse is coderen, omdat het me leuk lijkt om mijn eigen dingen te bouwen, zoals games, applicaties of websites.</p>
         </div>
     </div>
 
-    <script>
-        // Canvas setup
-        const canvas = document.getElementById('stars-canvas');
-        const ctx = canvas.getContext('2d');
-        const shootingStars = [];
+    <footer class="site-footer">
+        <div class="container">
+            <p>© 2026 Fabian | <a href="https://github.com/fabianbrol2007-stack" target="_blank">Bekijk mijn GitHub</a></p>
+        </div>
+    </footer>
 
-        // Resize canvas to fit window
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+    <script id="falling stars">
+    const canvas = document.getElementById('stars-canvas');
+    const ctx = canvas.getContext('2d');
+    const shootingStars = [];
+    const sparkles = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function createShootingStar() {
+        const angle = Math.PI / 4 + (Math.random() - 0.5) * 0.3;
+        return {
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height * 0.4,
+            length: Math.random() * 200 + 100,
+            speed: Math.random() * 8 + 4,
+            opacity: 0,
+            fadeIn: true,
+            angle: angle,
+            width: Math.random() * 2 + 1,
+            color: Math.random() < 0.5 ? '255, 255, 255' : '180, 220, 255'
+        };
+    }
+
+    function createSparkle(x, y) {
+        return {
+            x: x + (Math.random() - 0.5) * 10,
+            y: y + (Math.random() - 0.5) * 10,
+            size: Math.random() * 3 + 1,
+            opacity: Math.random() * 0.8 + 0.2,
+            fade: Math.random() * 0.05 + 0.02
+        };
+    }
+
+    function drawGlow(x, y, opacity, color) {
+        const glow = ctx.createRadialGradient(x, y, 0, x, y, 12);
+        glow.addColorStop(0, `rgba(${color}, ${opacity})`);
+        glow.addColorStop(0.3, `rgba(${color}, ${opacity * 0.4})`);
+        glow.addColorStop(1, `rgba(${color}, 0)`);
+        ctx.beginPath();
+        ctx.arc(x, y, 12, 0, Math.PI * 2);
+        ctx.fillStyle = glow;
+        ctx.fill();
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Spawn new shooting stars
+        if (Math.random() < 0.02) {
+            shootingStars.push(createShootingStar());
         }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
 
-        // Create a new shooting star
-        function createShootingStar() {
-            return {
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height * 0.5,
-                length: Math.random() * 150 + 50,
-                speed: Math.random() * 6 + 4,
-                opacity: 1,
-                angle: Math.PI / 4
-            };
-        }
+        // Draw shooting stars
+        for (let i = shootingStars.length - 1; i >= 0; i--) {
+            const star = shootingStars[i];
+            const endX = star.x - Math.cos(star.angle) * star.length;
+            const endY = star.y - Math.sin(star.angle) * star.length;
 
-        // Draw and animate shooting stars
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            if (Math.random() < 0.03) {
-                shootingStars.push(createShootingStar());
+            // Fade in and out
+            if (star.fadeIn) {
+                star.opacity += 0.05;
+                if (star.opacity >= 1) star.fadeIn = false;
+            } else {
+                star.opacity -= 0.015;
             }
 
-            for (let i = shootingStars.length - 1; i >= 0; i--) {
-                const star = shootingStars[i];
-                const endX = star.x - Math.cos(star.angle) * star.length;
-                const endY = star.y - Math.sin(star.angle) * star.length;
+            // Draw glowing head
+            drawGlow(star.x, star.y, star.opacity, star.color);
 
-                // Create gradient for star trail
-                const gradient = ctx.createLinearGradient(star.x, star.y, endX, endY);
-                gradient.addColorStop(0, `rgba(255, 255, 255, ${star.opacity})`);
-                gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            // Draw trail
+            const gradient = ctx.createLinearGradient(star.x, star.y, endX, endY);
+            gradient.addColorStop(0, `rgba(${star.color}, ${star.opacity})`);
+            gradient.addColorStop(0.3, `rgba(${star.color}, ${star.opacity * 0.4})`);
+            gradient.addColorStop(1, `rgba(${star.color}, 0)`);
 
-                // Draw star
-                ctx.beginPath();
-                ctx.moveTo(star.x, star.y);
-                ctx.lineTo(endX, endY);
-                ctx.strokeStyle = gradient;
-                ctx.lineWidth = 2;
-                ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(star.x, star.y);
+            ctx.lineTo(endX, endY);
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = star.width;
+            ctx.lineCap = 'round';
+            ctx.stroke();
 
-                // Update star position and opacity
-                star.x += star.speed;
-                star.y += star.speed;
-                star.opacity -= 0.02;
-
-                // Remove star if fully faded
-                if (star.opacity <= 0) {
-                    shootingStars.splice(i, 1);
-                }
+            // Spawn sparkles along the trail
+            if (Math.random() < 0.4) {
+                sparkles.push(createSparkle(star.x, star.y));
             }
 
-            requestAnimationFrame(animate);
+            // Move star
+            star.x += star.speed;
+            star.y += star.speed * 0.6;
+
+            if (star.opacity <= 0) {
+                shootingStars.splice(i, 1);
+            }
         }
 
-        animate();
+        // Draw sparkles
+        for (let i = sparkles.length - 1; i >= 0; i--) {
+            const sp = sparkles[i];
+            ctx.beginPath();
+            ctx.arc(sp.x, sp.y, sp.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(180, 220, 255, ${sp.opacity})`;
+            ctx.fill();
+            sp.opacity -= sp.fade;
+            if (sp.opacity <= 0) sparkles.splice(i, 1);
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+    </script>
+    <script id="holographic effect">
+    const sections = document.querySelectorAll('.section');
+
+    sections.forEach(section => {
+        section.addEventListener('mousemove', (e) => {
+            const rect = section.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const xPercent = (x / rect.width) * 100;
+            const yPercent = (y / rect.height) * 100;
+
+            const rotateX = (y / rect.height - 0.5) * 20;
+            const rotateY = (x / rect.width - 0.5) * -20;
+
+            section.style.transition = 'none';
+            section.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+            section.style.background = `
+                radial-gradient(circle at ${xPercent}% ${yPercent}%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.75) 40%),
+                linear-gradient(
+                    ${xPercent * 3.6}deg,
+                    rgba(255,0,0,0.15),
+                    rgba(255,165,0,0.15),
+                    rgba(255,255,0,0.15),
+                    rgba(0,255,0,0.15),
+                    rgba(0,0,255,0.15),
+                    rgba(238,130,238,0.15)
+                )
+            `;
+        });
+
+        section.addEventListener('mouseleave', () => {
+            section.style.transition = 'transform 0.5s ease';
+            section.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) scale(1)';
+        });
+    });
     </script>
 </body>
 </html>
