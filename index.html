@@ -14,6 +14,7 @@
             <h1>Over mezelf</h1>
             <h3>Introductie</h3>
             <p>Hallo, mijn naam is Fabian. Ik ben 19 jaar oud en woon in Terneuzen. Ik loop school op Scalda, en ik volg de studie Software Development (nog niet officieel).</p>
+            <a href="cv.pdf"><button>Bekijk mijn CV</button></a>
         </div>
         <div id="hobbies" class="section">
             <h1>Hobby en interessen</h1>
@@ -79,18 +80,15 @@
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Spawn new shooting stars
         if (Math.random() < 0.02) {
             shootingStars.push(createShootingStar());
         }
 
-        // Draw shooting stars
         for (let i = shootingStars.length - 1; i >= 0; i--) {
             const star = shootingStars[i];
             const endX = star.x - Math.cos(star.angle) * star.length;
             const endY = star.y - Math.sin(star.angle) * star.length;
 
-            // Fade in and out
             if (star.fadeIn) {
                 star.opacity += 0.05;
                 if (star.opacity >= 1) star.fadeIn = false;
@@ -98,10 +96,8 @@
                 star.opacity -= 0.015;
             }
 
-            // Draw glowing head
             drawGlow(star.x, star.y, star.opacity, star.color);
 
-            // Draw trail
             const gradient = ctx.createLinearGradient(star.x, star.y, endX, endY);
             gradient.addColorStop(0, `rgba(${star.color}, ${star.opacity})`);
             gradient.addColorStop(0.3, `rgba(${star.color}, ${star.opacity * 0.4})`);
@@ -115,12 +111,10 @@
             ctx.lineCap = 'round';
             ctx.stroke();
 
-            // Spawn sparkles along the trail
             if (Math.random() < 0.4) {
                 sparkles.push(createSparkle(star.x, star.y));
             }
 
-            // Move star
             star.x += star.speed;
             star.y += star.speed * 0.6;
 
@@ -129,7 +123,6 @@
             }
         }
 
-        // Draw sparkles
         for (let i = sparkles.length - 1; i >= 0; i--) {
             const sp = sparkles[i];
             ctx.beginPath();
