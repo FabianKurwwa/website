@@ -34,6 +34,17 @@
             position: relative;
             z-index: 10;
         }
+
+        /* Typing animation */
+        #typed-text::after {
+            content: '|';
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -41,7 +52,7 @@
 
     <div class="container">
         <div id="introduction" class="section">
-            <h1>Over mezelf</h1>
+            <h1 id="typed-text"></h1>
             <h3>Introductie</h3>
             <p>Hallo, mijn naam is Fabian. Ik ben 19 jaar oud en woon in Terneuzen. Ik loop school op Scalda, en ik volg de studie Software Development (nog niet officieel).</p>
         </div>
@@ -213,6 +224,49 @@
             section.style.background = 'rgba(255, 255, 255, 0.4)';
         });
     });
+    </script>
+
+    <script id="typing animation">
+    const phrases = [
+        'Over mezelf',
+        'Student Software Development',
+    ];
+
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const typedEl = document.getElementById('typed-text');
+    const typingSpeed = 80;
+    const deletingSpeed = 40;
+    const pauseTime = 1800;
+
+    function type() {
+        const currentPhrase = phrases[phraseIndex];
+
+        if (isDeleting) {
+            typedEl.textContent = currentPhrase.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            typedEl.textContent = currentPhrase.substring(0, charIndex + 1);
+            charIndex++;
+        }
+
+        let delay = isDeleting ? deletingSpeed : typingSpeed;
+
+        if (!isDeleting && charIndex === currentPhrase.length) {
+            // Finished typing — pause then start deleting
+            delay = pauseTime;
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            // Finished deleting — move to next phrase
+            isDeleting = false;
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+        }
+
+        setTimeout(type, delay);
+    }
+
+    type();
     </script>
 </body>
 </html>
