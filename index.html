@@ -44,10 +44,163 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
+
+        /* ── Custom cursor ── */
+        * {
+            cursor: none !important;
+        }
+
+        #cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            box-shadow:
+                0 0 6px 2px rgba(180, 220, 255, 0.9),
+                0 0 14px 4px rgba(180, 220, 255, 0.5);
+            transition: transform 0.08s ease, background 0.2s ease;
+        }
+
+        #cursor-ring {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            border: 1.5px solid rgba(180, 220, 255, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.12s ease, width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
+        }
+
+        #cursor-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9997;
+        }
+
+        /* ── Project cards ── */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+            margin-top: 16px;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(180, 220, 255, 0.2);
+            border-radius: 14px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(180, 220, 255, 0.15);
+        }
+
+        .wip-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 200, 80, 0.15);
+            border: 1px solid rgba(255, 200, 80, 0.4);
+            color: #ffd166;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+        }
+
+        .wip-badge::before {
+            content: '';
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            background: #ffd166;
+            border-radius: 50%;
+            animation: pulse-dot 1.2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%       { opacity: 0.4; transform: scale(0.7); }
+        }
+
+        .project-card h3 {
+            margin: 0 0 8px;
+            font-size: 1.1rem;
+            color: #e8f0ff;
+        }
+
+        .project-card p {
+            margin: 0 0 16px;
+            font-size: 0.88rem;
+            color: rgba(200, 220, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .project-tag {
+            background: rgba(180, 220, 255, 0.1);
+            border: 1px solid rgba(180, 220, 255, 0.25);
+            color: #a0c4ff;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        /* shimmer sweep across the card */
+        .project-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -75%;
+            width: 50%;
+            height: 200%;
+            background: linear-gradient(
+                120deg,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.06) 50%,
+                rgba(255,255,255,0) 100%
+            );
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%   { left: -75%; }
+            100% { left: 125%; }
+        }
     </style>
 </head>
 <body>
     <canvas id="stars-canvas"></canvas>
+    <canvas id="cursor-canvas"></canvas>
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
 
     <div class="container">
         <div id="introduction" class="section">
@@ -62,6 +215,24 @@
         <div id="learn" class="section">
             <h1>Wat ik graag wil leren</h1>
             <p>HTML, CSS, Lua, Javascript, Python, C++, C# en SQL</p>
+        </div>
+        <div id="projects" class="section">
+            <h1>Projecten</h1>
+            <p>Hier komen mijn projecten zodra ik ze heb gebouwd.</p>
+            <div class="projects-grid">
+
+                <!-- W.I.P card -->
+                <div class="project-card">
+                    <div class="wip-badge">Work in progress</div>
+                    <h3>🚧 Eerste project komt eraan</h3>
+                    <p>Ik ben net begonnen met Software Development en werk momenteel aan mijn eerste echte project. Kom binnenkort terug!</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Binnenkort</span>
+                        <span class="project-tag">In ontwikkeling</span>
+                    </div>
+                </div>
+
+            </div>
         </div>
         <div id="cv" class="section">
             <h1>Mijn CV</h1>
@@ -90,7 +261,6 @@
         generateBgStars();
     }
 
-    // ── Static background stars ──────────────────────────────────────────
     function generateBgStars() {
         bgStars = [];
         const count = Math.floor((canvas.width * canvas.height) / 6000);
@@ -110,7 +280,6 @@
         for (const s of bgStars) {
             s.opacity += s.twinkleSpeed * s.twinkleDir;
             if (s.opacity > 0.9 || s.opacity < 0.1) s.twinkleDir *= -1;
-
             ctx.beginPath();
             ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
             ctx.fillStyle = `rgba(200, 220, 255, ${s.opacity})`;
@@ -118,7 +287,6 @@
         }
     }
 
-    // ── Shooting stars ───────────────────────────────────────────────────
     const COLORS = [
         '255, 255, 255',
         '180, 220, 255',
@@ -140,23 +308,20 @@
             angle,
             width: Math.random() * 2.5 + 0.8,
             color,
-            tail: [],          // stores past positions for a glowing tail
+            tail: [],
             glowSize: Math.random() * 14 + 8
         };
     }
 
     function drawShootingStar(star) {
-        // Record tail position
         star.tail.push({ x: star.x, y: star.y, opacity: star.opacity });
         if (star.tail.length > 18) star.tail.shift();
 
-        // Draw tail segments (fading older segments)
         for (let t = 0; t < star.tail.length - 1; t++) {
             const p1 = star.tail[t];
             const p2 = star.tail[t + 1];
             const tailOpacity = (t / star.tail.length) * star.opacity * 0.6;
             const tailWidth = (t / star.tail.length) * star.width * 1.5;
-
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
@@ -166,7 +331,6 @@
             ctx.stroke();
         }
 
-        // Main streak
         const endX = star.x - Math.cos(star.angle) * star.length;
         const endY = star.y - Math.sin(star.angle) * star.length;
 
@@ -183,14 +347,10 @@
         ctx.lineCap = 'round';
         ctx.stroke();
 
-        // Bright head glow (two layered radial gradients for depth)
         drawGlow(star.x, star.y, star.opacity * 0.6, star.color, star.glowSize * 2);
         drawGlow(star.x, star.y, star.opacity,       star.color, star.glowSize * 0.5);
 
-        // Scatter sparkle particles from the head
-        if (Math.random() < 0.5) {
-            spawnParticle(star.x, star.y, star.color, star.opacity);
-        }
+        if (Math.random() < 0.5) spawnParticle(star.x, star.y, star.color, star.opacity);
     }
 
     function drawGlow(x, y, opacity, color, size) {
@@ -204,13 +364,11 @@
         ctx.fill();
     }
 
-    // ── Sparkle particles ────────────────────────────────────────────────
     function spawnParticle(x, y, color, parentOpacity) {
         const angle = Math.random() * Math.PI * 2;
         const speed = Math.random() * 1.5 + 0.3;
         particles.push({
-            x,
-            y,
+            x, y,
             vx: Math.cos(angle) * speed,
             vy: Math.sin(angle) * speed,
             size: Math.random() * 2.5 + 0.5,
@@ -225,12 +383,9 @@
             const p = particles[i];
             p.x += p.vx;
             p.y += p.vy;
-            p.vy += 0.03; // slight gravity
+            p.vy += 0.03;
             p.opacity -= p.fade;
-
             if (p.opacity <= 0) { particles.splice(i, 1); continue; }
-
-            // Tiny cross / star shape for sparkles
             ctx.save();
             ctx.translate(p.x, p.y);
             ctx.fillStyle = `rgba(${p.color}, ${p.opacity})`;
@@ -240,32 +395,23 @@
         }
     }
 
-    // ── Main loop ────────────────────────────────────────────────────────
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
         drawBgStars();
 
-        // Spawn new shooting star occasionally
-        if (Math.random() < 0.018) {
-            shootingStars.push(createShootingStar());
-        }
+        if (Math.random() < 0.018) shootingStars.push(createShootingStar());
 
         for (let i = shootingStars.length - 1; i >= 0; i--) {
             const star = shootingStars[i];
-
             if (star.fadeIn) {
                 star.opacity += 0.06;
                 if (star.opacity >= 1) star.fadeIn = false;
             } else {
                 star.opacity -= 0.012;
             }
-
             drawShootingStar(star);
-
             star.x += star.speed;
             star.y += star.speed * 0.55;
-
             if (star.opacity <= 0) shootingStars.splice(i, 1);
         }
 
@@ -286,10 +432,8 @@
             const rect = section.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-
             const xPercent = (x / rect.width) * 100;
             const yPercent = (y / rect.height) * 100;
-
             const rotateX = (y / rect.height - 0.5) * 20;
             const rotateY = (x / rect.width - 0.5) * -20;
 
@@ -320,7 +464,6 @@
     <script id="typing animation">
     const phrases = [
         'Over mezelf',
-
         'Student Software Development',
     ];
 
@@ -334,7 +477,6 @@
 
     function type() {
         const currentPhrase = phrases[phraseIndex];
-
         if (isDeleting) {
             typedEl.textContent = currentPhrase.substring(0, charIndex - 1);
             charIndex--;
@@ -357,6 +499,124 @@
     }
 
     type();
+    </script>
+
+    <script id="cursor effect">
+    const cursorDot  = document.getElementById('cursor-dot');
+    const cursorRing = document.getElementById('cursor-ring');
+    const cursorCanvas = document.getElementById('cursor-canvas');
+    const cctx = cursorCanvas.getContext('2d');
+
+    let mouseX = -100, mouseY = -100;
+    let ringX  = -100, ringY  = -100;
+    let cursorTrail = [];
+
+    const CURSOR_COLORS = [
+        '180, 220, 255',
+        '200, 180, 255',
+        '255, 255, 255',
+        '180, 255, 220'
+    ];
+
+    function resizeCursorCanvas() {
+        cursorCanvas.width  = window.innerWidth;
+        cursorCanvas.height = window.innerHeight;
+    }
+    resizeCursorCanvas();
+    window.addEventListener('resize', resizeCursorCanvas);
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        if (Math.random() < 0.4) {
+            cursorTrail.push({
+                x: mouseX + (Math.random() - 0.5) * 8,
+                y: mouseY + (Math.random() - 0.5) * 8,
+                size: Math.random() * 3 + 1,
+                opacity: Math.random() * 0.7 + 0.3,
+                fade: Math.random() * 0.04 + 0.02,
+                color: CURSOR_COLORS[Math.floor(Math.random() * CURSOR_COLORS.length)],
+                vx: (Math.random() - 0.5) * 0.8,
+                vy: (Math.random() - 0.5) * 0.8 - 0.5
+            });
+        }
+    });
+
+    document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            cursorRing.style.width  = '48px';
+            cursorRing.style.height = '48px';
+            cursorRing.style.borderColor = 'rgba(200, 180, 255, 0.9)';
+            cursorDot.style.transform = 'translate(-50%, -50%) scale(1.5)';
+            cursorDot.style.background = 'rgba(200, 180, 255, 1)';
+        });
+        el.addEventListener('mouseleave', () => {
+            cursorRing.style.width  = '32px';
+            cursorRing.style.height = '32px';
+            cursorRing.style.borderColor = 'rgba(180, 220, 255, 0.6)';
+            cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
+            cursorDot.style.background = 'white';
+        });
+    });
+
+    document.addEventListener('click', () => {
+        for (let i = 0; i < 12; i++) {
+            const angle = (i / 12) * Math.PI * 2;
+            const speed = Math.random() * 3 + 1.5;
+            cursorTrail.push({
+                x: mouseX,
+                y: mouseY,
+                size: Math.random() * 3 + 1,
+                opacity: 1,
+                fade: Math.random() * 0.03 + 0.02,
+                color: CURSOR_COLORS[Math.floor(Math.random() * CURSOR_COLORS.length)],
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed
+            });
+        }
+    });
+
+    function animateCursor() {
+        ringX += (mouseX - ringX) * 0.12;
+        ringY += (mouseY - ringY) * 0.12;
+
+        cursorDot.style.left  = mouseX + 'px';
+        cursorDot.style.top   = mouseY + 'px';
+        cursorRing.style.left = ringX + 'px';
+        cursorRing.style.top  = ringY + 'px';
+
+        cctx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
+
+        for (let i = cursorTrail.length - 1; i >= 0; i--) {
+            const t = cursorTrail[i];
+            t.x += t.vx;
+            t.y += t.vy;
+            t.vy += 0.05;
+            t.opacity -= t.fade;
+
+            if (t.opacity <= 0) { cursorTrail.splice(i, 1); continue; }
+
+            const glow = cctx.createRadialGradient(t.x, t.y, 0, t.x, t.y, t.size * 3);
+            glow.addColorStop(0,   `rgba(${t.color}, ${t.opacity})`);
+            glow.addColorStop(0.5, `rgba(${t.color}, ${t.opacity * 0.3})`);
+            glow.addColorStop(1,   `rgba(${t.color}, 0)`);
+
+            cctx.beginPath();
+            cctx.arc(t.x, t.y, t.size * 3, 0, Math.PI * 2);
+            cctx.fillStyle = glow;
+            cctx.fill();
+
+            cctx.beginPath();
+            cctx.arc(t.x, t.y, t.size * 0.5, 0, Math.PI * 2);
+            cctx.fillStyle = `rgba(${t.color}, ${t.opacity})`;
+            cctx.fill();
+        }
+
+        requestAnimationFrame(animateCursor);
+    }
+
+    animateCursor();
     </script>
 </body>
 </html>
