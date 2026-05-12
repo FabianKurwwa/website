@@ -36,25 +36,21 @@
             position: fixed; inset: 0;
             pointer-events: none; z-index: 0;
         }
-        #cursor-canvas {
-            position: fixed; inset: 0;
-            pointer-events: none; z-index: 9997;
-        }
         #cursor-dot {
-            position: fixed; width: 8px; height: 8px;
-            background: var(--lime); border-radius: 50%;
+            position: fixed; width: 24px; height: 24px;
             pointer-events: none; z-index: 9999;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 10px 2px rgba(200,255,87,0.6);
-            transition: transform .1s;
         }
-        #cursor-ring {
-            position: fixed; width: 28px; height: 28px;
-            border: 1px solid rgba(200,255,87,0.4);
-            border-radius: 50%; pointer-events: none; z-index: 9998;
-            transform: translate(-50%, -50%);
-            transition: width .15s, height .15s, border-color .15s;
+        #cursor-dot::before, #cursor-dot::after {
+            content: '';
+            position: absolute;
+            background: rgba(212, 224, 247, 0.85);
+            border-radius: 1px;
+            transition: background .15s;
         }
+        #cursor-dot::before { width: 1.5px; height: 100%; left: 50%; top: 0; transform: translateX(-50%); }
+        #cursor-dot::after  { width: 100%; height: 1.5px; top: 50%; left: 0; transform: translateY(-50%); }
+        #cursor-dot.hover::before, #cursor-dot.hover::after { background: var(--lime); }
 
         .page {
             position: relative; z-index: 10;
@@ -63,7 +59,6 @@
             padding: 80px 32px 120px;
         }
 
-        /* ── topbar ── */
         .topbar {
             display: flex;
             justify-content: space-between;
@@ -87,7 +82,6 @@
         }
         .topbar-links a:hover { color: var(--ink); }
 
-        /* ── hero ── */
         .hero { margin-bottom: 88px; }
 
         .hero-eyebrow {
@@ -127,7 +121,6 @@
         }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* ── divider ── */
         .divider {
             display: flex;
             align-items: center;
@@ -147,7 +140,6 @@
             background: var(--border);
         }
 
-        /* ── sections ── */
         .section { margin-bottom: 72px; }
 
         .section p {
@@ -157,14 +149,12 @@
             max-width: 520px;
         }
 
-        /* ── about ── */
         .about-block {
             border-left: 2px solid var(--lime);
             padding-left: 20px;
         }
         .about-block p { color: rgba(190, 210, 250, 0.8); }
 
-        /* ── skill badges (the little tags) ── */
         .skills-list {
             display: flex;
             flex-wrap: wrap;
@@ -184,33 +174,37 @@
         .skill:nth-child(5) { border-radius: 2px; }
         .skill:nth-child(7) { border-radius: 8px; }
 
-        /* ── skill bars ── */
-        .skillbar-list {
+        .skill-status-list {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 11px;
             margin-top: 24px;
         }
-        .skillbar-name {
-            display: block;
+        .skill-row {
+            display: flex;
+            align-items: baseline;
+        }
+        .skill-row-name {
             font-size: 12px;
+            color: var(--ink);
+            min-width: 110px;
+            flex-shrink: 0;
+        }
+        .skill-row-dots {
+            flex: 1;
+            border-bottom: 1px dotted rgba(180, 200, 240, 0.18);
+            margin: 0 10px;
+            position: relative;
+            top: -3px;
+        }
+        .skill-row-status {
+            font-size: 11px;
             color: var(--ink-dim);
-            margin-bottom: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
-        .skillbar-track {
-            background: rgba(180, 200, 240, 0.08);
-            border: 1px solid var(--border);
-            border-radius: 999px;
-            height: 8px;
-            width: 100%;
-        }
-        .skillbar-fill {
-            background: var(--lime);
-            border-radius: 999px;
-            height: 100%;
-        }
+        .skill-row-status.active { color: var(--lime); }
 
-        /* ── project ── */
         .project {
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -279,7 +273,6 @@
             70% { transform: translateX(100%); }
         }
 
-        /* ── cv ── */
         .cv-row { margin-top: 20px; }
         .cv-link {
             display: inline-flex;
@@ -297,7 +290,6 @@
         }
         .cv-link:hover { opacity: .88; transform: translateY(-1px); }
 
-        /* ── footer ── */
         .footer {
             margin-top: 100px;
             padding-top: 28px;
@@ -328,9 +320,7 @@
 </head>
 <body>
     <canvas id="stars-canvas"></canvas>
-    <canvas id="cursor-canvas"></canvas>
     <div id="cursor-dot"></div>
-    <div id="cursor-ring"></div>
 
     <div class="page">
 
@@ -371,7 +361,6 @@
                 <div class="divider-line"></div>
             </div>
 
-            <!-- Skill badges -->
             <div class="skills-list">
                 <span class="skill">HTML</span>
                 <span class="skill">CSS</span>
@@ -383,55 +372,46 @@
                 <span class="skill">SQL</span>
             </div>
 
-            <!-- Skill bars -->
-            <div class="skillbar-list">
-                <div class="skillbar-item">
-                    <span class="skillbar-name">HTML</span>
-                    <div class="skillbar-track">
-                        <div class="skillbar-fill" style="width: 25%;"></div>
-                    </div>
+            <div class="skill-status-list">
+                <div class="skill-row">
+                    <span class="skill-row-name">HTML</span>
+                    <span class="skill-row-dots"></span>
+                    <span class="skill-row-status active">aan het leren</span>
                 </div>
-                <div class="skillbar-item">
-                    <span class="skillbar-name">CSS</span>
-                    <div class="skillbar-track">
-                        <div class="skillbar-fill" style="width: 10%;"></div>
-                    </div>
+                <div class="skill-row">
+                    <span class="skill-row-name">CSS</span>
+                    <span class="skill-row-dots"></span>
+                    <span class="skill-row-status active">net begonnen</span>
                 </div>
-                <div class="skillbar-item">
-                    <span class="skillbar-name">JavaScript</span>
-                    <div class="skillbar-track">
-                        <div class="skillbar-fill" style="width: 0%;"></div>
-                    </div>
+                <div class="skill-row">
+                    <span class="skill-row-name">JavaScript</span>
+                    <span class="skill-row-dots"></span>
+                    <span class="skill-row-status">volgende</span>
                 </div>
-                <div class="skillbar-item">
-                    <span class="skillbar-name">Python</span>
-                    <div class="skillbar-track">
-                        <div class="skillbar-fill" style="width: 0%;"></div>
-                    </div>
+                <div class="skill-row">
+                    <span class="skill-row-name">Python</span>
+                    <span class="skill-row-dots"></span>
+                    <span class="skill-row-status">wil ik leren</span>
                 </div>
-                <div class="skillbar-item">
-                    <span class="skillbar-name">Lua</span>
-                    <div class="skillbar-track">
-                        <div class="skillbar-fill" style="width: 0%;"></div>
-                    </div>
+                <div class="skill-row">
+                    <span class="skill-row-name">Lua</span>
+                    <span class="skill-row-dots"></span>
+                    <span class="skill-row-status">wil ik leren</span>
                 </div>
-                <div class="skillbar-item">
-                    <span class="skillbar-name">C++</span>
-                    <div class="skillbar-track">
-                        <div class="skillbar-fill" style="width: 0%;"></div>
-                    </div>
+                <div class="skill-row">
+                    <span class="skill-row-name">C++</span>
+                    <span class="skill-row-dots"></span>
+                    <span class="skill-row-status">later</span>
                 </div>
-                <div class="skillbar-item">
-                    <span class="skillbar-name">C#</span>
-                    <div class="skillbar-track">
-                        <div class="skillbar-fill" style="width: 0%;"></div>
-                    </div>
+                <div class="skill-row">
+                    <span class="skill-row-name">C#</span>
+                    <span class="skill-row-dots"></span>
+                    <span class="skill-row-status">later</span>
                 </div>
-                <div class="skillbar-item">
-                    <span class="skillbar-name">SQL</span>
-                    <div class="skillbar-track">
-                        <div class="skillbar-fill" style="width: 0%;"></div>
-                    </div>
+                <div class="skill-row">
+                    <span class="skill-row-name">SQL</span>
+                    <span class="skill-row-dots"></span>
+                    <span class="skill-row-status">later</span>
                 </div>
             </div>
         </section>
@@ -483,62 +463,139 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         bgStars = [];
-        const n = Math.floor(canvas.width * canvas.height / 7000);
+        const n = Math.floor(canvas.width * canvas.height / 6500);
         for (let i = 0; i < n; i++) bgStars.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            r: Math.random() * 1.1 + 0.15,
+            r: Math.random() * 1.2 + 0.15,
             o: Math.random() * 0.6 + 0.15,
-            ts: Math.random() * 0.015 + 0.004,
+            ts: Math.random() * 0.012 + 0.003,
             td: Math.random() < .5 ? 1 : -1
         });
     }
 
-    const COLORS = ['255,255,255','180,220,255','200,255,87','200,180,255'];
+    const COLORS = ['255,255,255','180,220,255','200,255,87','255,210,140','210,190,255'];
 
     function newStar() {
-        const c = COLORS[Math.floor(Math.random()*COLORS.length)];
-        const angle = Math.PI/4 + (Math.random()-.5)*.4;
-        return { x: Math.random()*canvas.width*1.2 - canvas.width*.1, y: Math.random()*canvas.height*.5, len: Math.random()*260+100, speed: Math.random()*9+4, o: 0, fadeIn: true, angle, w: Math.random()*2+.6, c, tail: [], gs: Math.random()*12+7 };
+        const c = COLORS[Math.floor(Math.random() * COLORS.length)];
+        const big = Math.random() < 0.18;
+        const angle = Math.PI / 4 + (Math.random() - .5) * .5;
+        const speed = big ? Math.random() * 5 + 5 : Math.random() * 7 + 3;
+        return {
+            x: Math.random() * canvas.width * 1.2 - canvas.width * .1,
+            y: Math.random() * canvas.height * .55,
+            speed, angle,
+            len: big ? Math.random() * 380 + 220 : Math.random() * 180 + 80,
+            w: big ? Math.random() * 2 + 1.5 : Math.random() * 1.2 + .5,
+            gs: big ? Math.random() * 18 + 10 : Math.random() * 9 + 4,
+            c, o: 0, fadeIn: true, tail: [], sparks: [], big,
+        };
     }
 
-    function glow(x,y,o,c,size) {
-        const g = ctx.createRadialGradient(x,y,0,x,y,size);
-        g.addColorStop(0,`rgba(${c},${o})`); g.addColorStop(.4,`rgba(${c},${o*.3})`); g.addColorStop(1,`rgba(${c},0)`);
-        ctx.beginPath(); ctx.arc(x,y,size,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
+    function addSparks(s) {
+        if (Math.random() > (s.big ? .45 : .15) || s.o < .2) return;
+        s.sparks.push({
+            x: s.x, y: s.y,
+            vx: (Math.random() - .5) * 1.4,
+            vy: (Math.random() - .5) * 1.4 - .4,
+            r: Math.random() * 1.8 + .4,
+            o: s.o * (.5 + Math.random() * .5),
+            dec: Math.random() * .025 + .012,
+        });
+    }
+
+    function glow(x, y, o, c, r) {
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+        g.addColorStop(0, `rgba(${c},${o})`);
+        g.addColorStop(.35, `rgba(${c},${o * .35})`);
+        g.addColorStop(1, `rgba(${c},0)`);
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
     }
 
     function drawStar(s) {
-        s.tail.push({x:s.x,y:s.y});
-        if (s.tail.length > 16) s.tail.shift();
-        for (let t=0;t<s.tail.length-1;t++) {
-            ctx.beginPath(); ctx.moveTo(s.tail[t].x,s.tail[t].y); ctx.lineTo(s.tail[t+1].x,s.tail[t+1].y);
-            ctx.strokeStyle=`rgba(${s.c},${(t/s.tail.length)*s.o*.5})`; ctx.lineWidth=(t/s.tail.length)*s.w*1.4; ctx.lineCap='round'; ctx.stroke();
+        s.tail.push({ x: s.x, y: s.y });
+        const maxTail = s.big ? 48 : 28;
+        if (s.tail.length > maxTail) s.tail.shift();
+
+        // Motion trail — widens toward head
+        for (let t = 1; t < s.tail.length; t++) {
+            const p = t / s.tail.length;
+            ctx.beginPath();
+            ctx.moveTo(s.tail[t - 1].x, s.tail[t - 1].y);
+            ctx.lineTo(s.tail[t].x, s.tail[t].y);
+            ctx.strokeStyle = `rgba(${s.c},${p * s.o * .55})`;
+            ctx.lineWidth = p * s.w * 1.6;
+            ctx.lineCap = 'round'; ctx.stroke();
         }
-        const ex=s.x-Math.cos(s.angle)*s.len, ey=s.y-Math.sin(s.angle)*s.len;
-        const gr=ctx.createLinearGradient(s.x,s.y,ex,ey);
-        gr.addColorStop(0,`rgba(${s.c},${s.o})`); gr.addColorStop(.2,`rgba(${s.c},${s.o*.4})`); gr.addColorStop(1,`rgba(${s.c},0)`);
-        ctx.beginPath(); ctx.moveTo(s.x,s.y); ctx.lineTo(ex,ey); ctx.strokeStyle=gr; ctx.lineWidth=s.w; ctx.lineCap='round'; ctx.stroke();
-        glow(s.x,s.y,s.o*.5,s.c,s.gs*2); glow(s.x,s.y,s.o,s.c,s.gs*.4);
+
+        // Main beam
+        const ex = s.x - Math.cos(s.angle) * s.len;
+        const ey = s.y - Math.sin(s.angle) * s.len;
+        const gr = ctx.createLinearGradient(s.x, s.y, ex, ey);
+        gr.addColorStop(0, `rgba(${s.c},${s.o})`);
+        gr.addColorStop(.12, `rgba(${s.c},${s.o * .55})`);
+        gr.addColorStop(.45, `rgba(${s.c},${s.o * .1})`);
+        gr.addColorStop(1, `rgba(${s.c},0)`);
+        ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(ex, ey);
+        ctx.strokeStyle = gr; ctx.lineWidth = s.w; ctx.lineCap = 'round'; ctx.stroke();
+
+        // Multi-layer glow at head
+        glow(s.x, s.y, s.o * .2, s.c, s.gs * 6);
+        glow(s.x, s.y, s.o * .5, s.c, s.gs * 2.2);
+        glow(s.x, s.y, s.o, '255,255,255', s.gs * .45);
+
+        // Cross flare
+        if (s.o > .2) {
+            const fl = s.gs * 3 * s.o;
+            for (let a = 0; a < 2; a++) {
+                const ang = a * Math.PI / 2;
+                const flg = ctx.createLinearGradient(
+                    s.x - Math.cos(ang) * fl, s.y - Math.sin(ang) * fl,
+                    s.x + Math.cos(ang) * fl, s.y + Math.sin(ang) * fl
+                );
+                flg.addColorStop(0, `rgba(${s.c},0)`);
+                flg.addColorStop(.5, `rgba(255,255,255,${s.o * .45})`);
+                flg.addColorStop(1, `rgba(${s.c},0)`);
+                ctx.beginPath();
+                ctx.moveTo(s.x - Math.cos(ang) * fl, s.y - Math.sin(ang) * fl);
+                ctx.lineTo(s.x + Math.cos(ang) * fl, s.y + Math.sin(ang) * fl);
+                ctx.strokeStyle = flg; ctx.lineWidth = s.big ? 1.2 : .7; ctx.stroke();
+            }
+        }
+
+        // Floating spark particles
+        addSparks(s);
+        for (let i = s.sparks.length - 1; i >= 0; i--) {
+            const p = s.sparks[i];
+            p.x += p.vx; p.y += p.vy; p.vy += .025; p.o -= p.dec;
+            if (p.o <= 0) { s.sparks.splice(i, 1); continue; }
+            const pg = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2.5);
+            pg.addColorStop(0, `rgba(${s.c},${p.o})`);
+            pg.addColorStop(1, `rgba(${s.c},0)`);
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 2.5, 0, Math.PI * 2); ctx.fillStyle = pg; ctx.fill();
+        }
     }
 
     function animate() {
-        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         for (const s of bgStars) {
-            s.o += s.ts*s.td; if(s.o>.85||s.o<.08) s.td*=-1;
-            ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fillStyle=`rgba(200,215,255,${s.o})`; ctx.fill();
+            s.o += s.ts * s.td;
+            if (s.o > .85 || s.o < .08) s.td *= -1;
+            ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(200,215,255,${s.o})`; ctx.fill();
         }
-        if (Math.random()<.016) shootingStars.push(newStar());
-        for (let i=shootingStars.length-1;i>=0;i--) {
-            const s=shootingStars[i];
-            s.o += s.fadeIn ? .06 : -.013;
-            if(s.o>=1) s.fadeIn=false;
-            drawStar(s); s.x+=s.speed; s.y+=s.speed*.55;
-            if(s.o<=0) shootingStars.splice(i,1);
+        if (Math.random() < .017) shootingStars.push(newStar());
+        for (let i = shootingStars.length - 1; i >= 0; i--) {
+            const s = shootingStars[i];
+            s.o += s.fadeIn ? .055 : -.013;
+            if (s.o >= 1) { s.o = 1; s.fadeIn = false; }
+            drawStar(s);
+            s.x += s.speed; s.y += s.speed * .55;
+            if (s.o <= 0 && s.sparks.length === 0) shootingStars.splice(i, 1);
         }
         requestAnimationFrame(animate);
     }
-    resize(); window.addEventListener('resize',resize); animate();
+    resize(); window.addEventListener('resize', resize); animate();
     </script>
 
     <script>
@@ -568,39 +625,14 @@
     <script>
     // Cursor
     const dot = document.getElementById('cursor-dot');
-    const ring = document.getElementById('cursor-ring');
-    const cc = document.getElementById('cursor-canvas');
-    const cx = cc.getContext('2d');
-    let mx=-100,my=-100,rx=-100,ry=-100,trail=[];
-
-    function resizeCC() { cc.width=window.innerWidth; cc.height=window.innerHeight; }
-    resizeCC(); window.addEventListener('resize',resizeCC);
-
     document.addEventListener('mousemove', e => {
-        mx=e.clientX; my=e.clientY;
-        if(Math.random()<.35) trail.push({x:mx+(Math.random()-.5)*6,y:my+(Math.random()-.5)*6,s:Math.random()*2.5+.5,o:Math.random()*.6+.3,f:Math.random()*.04+.02,vx:(Math.random()-.5)*.6,vy:(Math.random()-.5)*.6-.4});
+        dot.style.left = e.clientX + 'px';
+        dot.style.top  = e.clientY + 'px';
     });
-
     document.querySelectorAll('a, .skill').forEach(el => {
-        el.addEventListener('mouseenter', () => { ring.style.width='44px'; ring.style.height='44px'; ring.style.borderColor='rgba(200,255,87,.7)'; dot.style.transform='translate(-50%,-50%) scale(1.4)'; });
-        el.addEventListener('mouseleave', () => { ring.style.width='28px'; ring.style.height='28px'; ring.style.borderColor='rgba(200,255,87,.4)'; dot.style.transform='translate(-50%,-50%) scale(1)'; });
+        el.addEventListener('mouseenter', () => dot.classList.add('hover'));
+        el.addEventListener('mouseleave', () => dot.classList.remove('hover'));
     });
-
-    function animCursor() {
-        rx+=(mx-rx)*.11; ry+=(my-ry)*.11;
-        dot.style.left=mx+'px'; dot.style.top=my+'px';
-        ring.style.left=rx+'px'; ring.style.top=ry+'px';
-        cx.clearRect(0,0,cc.width,cc.height);
-        for(let i=trail.length-1;i>=0;i--) {
-            const t=trail[i]; t.x+=t.vx; t.y+=t.vy; t.vy+=.04; t.o-=t.f;
-            if(t.o<=0){trail.splice(i,1);continue;}
-            const g=cx.createRadialGradient(t.x,t.y,0,t.x,t.y,t.s*3);
-            g.addColorStop(0,`rgba(200,255,87,${t.o*.6})`); g.addColorStop(1,`rgba(200,255,87,0)`);
-            cx.beginPath(); cx.arc(t.x,t.y,t.s*3,0,Math.PI*2); cx.fillStyle=g; cx.fill();
-        }
-        requestAnimationFrame(animCursor);
-    }
-    animCursor();
     </script>
 </body>
 </html>
