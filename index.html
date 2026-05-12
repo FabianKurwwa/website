@@ -90,6 +90,12 @@
             font-size: 13px; color: var(--ink-dim);
             max-width: 420px; line-height: 1.85;
         }
+        .day-counter {
+            margin-top: 20px;
+            font-size: 11px;
+            color: var(--ink-dim);
+        }
+        .day-counter span { color: var(--lime); font-weight: 500; }
 
         .section { margin-bottom: 80px; }
         .section h2 {
@@ -197,6 +203,7 @@
                 19 jaar, Terneuzen. Bezig met Software Development op Scalda.<br>
                 Ik leer hoe dingen worden gemaakt.
             </p>
+            <p class="day-counter">dag <span id="day-count"></span> van mijn coding journey</p>
         </section>
 
         <section id="over" class="section reveal">
@@ -453,6 +460,12 @@
     </script>
 
 
+
+    <script>
+    const start = new Date('2026-05-07');
+    const days  = Math.floor((new Date() - start) / 86400000);
+    document.getElementById('day-count').textContent = days;
+    </script>
 
     <script>
     // Cursor
