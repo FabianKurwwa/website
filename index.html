@@ -290,6 +290,7 @@
     const canvas = document.getElementById('stars-canvas');
     const ctx = canvas.getContext('2d');
     let shootingStars = [], bgStars = [];
+
     function resize() {
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         bgStars = [];
@@ -299,71 +300,147 @@
             r: Math.random() * 0.8 + 0.1, o: Math.random() * 0.35 + 0.06
         });
     }
+
     const COLORS = ['255,255,255','180,220,255','200,255,87','255,210,140','210,190,255'];
+
     function newStar() {
         const c = COLORS[Math.floor(Math.random() * COLORS.length)];
-        const big = Math.random() < 0.18;
+        const epic = Math.random() < 0.07;
+        const big  = !epic && Math.random() < 0.18;
         const angle = Math.PI / 4 + (Math.random() - .5) * .5;
-        const speed = big ? Math.random() * 5 + 5 : Math.random() * 7 + 3;
-        return { x: Math.random() * canvas.width * 1.2 - canvas.width * .1, y: Math.random() * canvas.height * .55, speed, angle, len: big ? Math.random() * 380 + 220 : Math.random() * 180 + 80, w: big ? Math.random() * 2 + 1.5 : Math.random() * 1.2 + .5, gs: big ? Math.random() * 18 + 10 : Math.random() * 9 + 4, c, o: 0, fadeIn: true, tail: [], sparks: [], big };
+        const speed = epic ? Math.random()*3+2 : big ? Math.random()*5+5 : Math.random()*7+3;
+        return {
+            x: Math.random()*canvas.width*1.2 - canvas.width*.1,
+            y: Math.random()*canvas.height*.55,
+            speed, angle,
+            len:  epic ? Math.random()*550+350 : big ? Math.random()*380+220 : Math.random()*180+80,
+            w:    epic ? Math.random()*2.5+2   : big ? Math.random()*2+1.5   : Math.random()*1.2+.5,
+            gs:   epic ? Math.random()*26+16   : big ? Math.random()*18+10   : Math.random()*9+4,
+            c, o: 0, fadeIn: true, tail: [], sparks: [], big, epic,
+        };
     }
+
     function addSparks(s) {
-        if (Math.random() > (s.big ? .45 : .15) || s.o < .2) return;
-        s.sparks.push({ x: s.x, y: s.y, vx: (Math.random()-.5)*1.4, vy: (Math.random()-.5)*1.4-.4, r: Math.random()*1.8+.4, o: s.o*(.5+Math.random()*.5), dec: Math.random()*.025+.012 });
+        const chance = s.epic ? .6 : s.big ? .45 : .15;
+        if (Math.random() > chance || s.o < .2) return;
+        const n = s.epic ? 2 : 1;
+        for (let i = 0; i < n; i++) {
+            s.sparks.push({
+                x: s.x, y: s.y,
+                vx: (Math.random()-.5)*1.8, vy: (Math.random()-.5)*1.8-.5,
+                r: Math.random()*(s.epic ? 2.5 : 1.8)+.4,
+                o: s.o*(.5+Math.random()*.5), dec: Math.random()*.022+.01,
+            });
+        }
     }
-    function glow(x,y,o,c,r) {
+
+    function glow(x, y, o, c, r) {
         const g = ctx.createRadialGradient(x,y,0,x,y,r);
-        g.addColorStop(0,`rgba(${c},${o})`); g.addColorStop(.35,`rgba(${c},${o*.35})`); g.addColorStop(1,`rgba(${c},0)`);
+        g.addColorStop(0, `rgba(${c},${o})`);
+        g.addColorStop(.35, `rgba(${c},${o*.35})`);
+        g.addColorStop(1, `rgba(${c},0)`);
         ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
     }
+
     function drawStar(s) {
-        s.tail.push({x:s.x,y:s.y});
-        const maxTail = s.big ? 48 : 28;
+        s.tail.push({x: s.x, y: s.y});
+        const maxTail = s.epic ? 64 : s.big ? 48 : 28;
         if (s.tail.length > maxTail) s.tail.shift();
-        for (let t=1;t<s.tail.length;t++) {
-            const p=t/s.tail.length;
-            ctx.beginPath(); ctx.moveTo(s.tail[t-1].x,s.tail[t-1].y); ctx.lineTo(s.tail[t].x,s.tail[t].y);
-            ctx.strokeStyle=`rgba(${s.c},${p*s.o*.55})`; ctx.lineWidth=p*s.w*1.6; ctx.lineCap='round'; ctx.stroke();
+
+        // Trail — white near head, colour toward tip
+        for (let t = 1; t < s.tail.length; t++) {
+            const p = t / s.tail.length;
+            ctx.beginPath();
+            ctx.moveTo(s.tail[t-1].x, s.tail[t-1].y);
+            ctx.lineTo(s.tail[t].x, s.tail[t].y);
+            ctx.strokeStyle = p > .7
+                ? `rgba(255,255,255,${p*s.o*.45})`
+                : `rgba(${s.c},${p*s.o*.55})`;
+            ctx.lineWidth = p * s.w * 1.8;
+            ctx.lineCap = 'round'; ctx.stroke();
         }
-        const ex=s.x-Math.cos(s.angle)*s.len, ey=s.y-Math.sin(s.angle)*s.len;
-        const gr=ctx.createLinearGradient(s.x,s.y,ex,ey);
-        gr.addColorStop(0,`rgba(${s.c},${s.o})`); gr.addColorStop(.12,`rgba(${s.c},${s.o*.55})`); gr.addColorStop(.45,`rgba(${s.c},${s.o*.1})`); gr.addColorStop(1,`rgba(${s.c},0)`);
-        ctx.beginPath(); ctx.moveTo(s.x,s.y); ctx.lineTo(ex,ey); ctx.strokeStyle=gr; ctx.lineWidth=s.w; ctx.lineCap='round'; ctx.stroke();
-        glow(s.x,s.y,s.o*.2,s.c,s.gs*6); glow(s.x,s.y,s.o*.5,s.c,s.gs*2.2); glow(s.x,s.y,s.o,'255,255,255',s.gs*.45);
-        if (s.o>.2) {
-            const fl=s.gs*3*s.o;
-            for (let a=0;a<2;a++) {
-                const ang=a*Math.PI/2;
-                const flg=ctx.createLinearGradient(s.x-Math.cos(ang)*fl,s.y-Math.sin(ang)*fl,s.x+Math.cos(ang)*fl,s.y+Math.sin(ang)*fl);
-                flg.addColorStop(0,`rgba(${s.c},0)`); flg.addColorStop(.5,`rgba(255,255,255,${s.o*.45})`); flg.addColorStop(1,`rgba(${s.c},0)`);
-                ctx.beginPath(); ctx.moveTo(s.x-Math.cos(ang)*fl,s.y-Math.sin(ang)*fl); ctx.lineTo(s.x+Math.cos(ang)*fl,s.y+Math.sin(ang)*fl);
-                ctx.strokeStyle=flg; ctx.lineWidth=s.big?1.2:.7; ctx.stroke();
-            }
+
+        // Main beam — white at head, fades to colour then transparent
+        const ex = s.x - Math.cos(s.angle)*s.len;
+        const ey = s.y - Math.sin(s.angle)*s.len;
+        const gr = ctx.createLinearGradient(s.x, s.y, ex, ey);
+        gr.addColorStop(0,    `rgba(255,255,255,${s.o})`);
+        gr.addColorStop(.06,  `rgba(${s.c},${s.o*.85})`);
+        gr.addColorStop(.25,  `rgba(${s.c},${s.o*.25})`);
+        gr.addColorStop(.6,   `rgba(${s.c},${s.o*.05})`);
+        gr.addColorStop(1,    `rgba(${s.c},0)`);
+        ctx.beginPath(); ctx.moveTo(s.x,s.y); ctx.lineTo(ex,ey);
+        ctx.strokeStyle=gr; ctx.lineWidth=s.w*1.1; ctx.lineCap='round'; ctx.stroke();
+
+        // Atmospheric haze — wide soft glow along the full beam
+        const haz = ctx.createLinearGradient(s.x, s.y, ex, ey);
+        haz.addColorStop(0,  `rgba(${s.c},${s.o*.1})`);
+        haz.addColorStop(.3, `rgba(${s.c},${s.o*.03})`);
+        haz.addColorStop(1,  `rgba(${s.c},0)`);
+        ctx.beginPath(); ctx.moveTo(s.x,s.y); ctx.lineTo(ex,ey);
+        ctx.strokeStyle=haz; ctx.lineWidth=s.w*7; ctx.lineCap='round'; ctx.stroke();
+
+        // 4-layer glow at head
+        glow(s.x, s.y, s.o*.07,  s.c,           s.gs*10);
+        glow(s.x, s.y, s.o*.22,  s.c,           s.gs*4.5);
+        glow(s.x, s.y, s.o*.55,  s.c,           s.gs*2);
+        glow(s.x, s.y, s.o,      '255,255,255', s.gs*.4);
+
+        // 8-pointed flare (main cross + 45° diagonal cross)
+        if (s.o > .2) {
+            const fl  = s.gs * 3.5 * s.o;
+            const fl2 = fl * .55;
+            const lw  = (s.epic||s.big) ? 1.1 : .65;
+            const drawFlare = (ang, len, alpha) => {
+                const fg = ctx.createLinearGradient(
+                    s.x-Math.cos(ang)*len, s.y-Math.sin(ang)*len,
+                    s.x+Math.cos(ang)*len, s.y+Math.sin(ang)*len
+                );
+                fg.addColorStop(0,  `rgba(${s.c},0)`);
+                fg.addColorStop(.5, `rgba(255,255,255,${alpha})`);
+                fg.addColorStop(1,  `rgba(${s.c},0)`);
+                ctx.beginPath();
+                ctx.moveTo(s.x-Math.cos(ang)*len, s.y-Math.sin(ang)*len);
+                ctx.lineTo(s.x+Math.cos(ang)*len, s.y+Math.sin(ang)*len);
+                ctx.strokeStyle=fg; ctx.lineWidth=lw; ctx.stroke();
+            };
+            drawFlare(0,           fl,  s.o*.48);
+            drawFlare(Math.PI/2,   fl,  s.o*.48);
+            drawFlare(Math.PI/4,   fl2, s.o*.25);
+            drawFlare(Math.PI*3/4, fl2, s.o*.25);
         }
+
+        // Sparks
         addSparks(s);
-        for (let i=s.sparks.length-1;i>=0;i--) {
-            const p=s.sparks[i]; p.x+=p.vx; p.y+=p.vy; p.vy+=.025; p.o-=p.dec;
-            if(p.o<=0){s.sparks.splice(i,1);continue;}
-            const pg=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*2.5);
-            pg.addColorStop(0,`rgba(${s.c},${p.o})`); pg.addColorStop(1,`rgba(${s.c},0)`);
+        for (let i = s.sparks.length-1; i >= 0; i--) {
+            const p = s.sparks[i];
+            p.x+=p.vx; p.y+=p.vy; p.vy+=.025; p.o-=p.dec;
+            if (p.o<=0) { s.sparks.splice(i,1); continue; }
+            const pg = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*2.5);
+            pg.addColorStop(0, `rgba(${s.c},${p.o})`);
+            pg.addColorStop(1, `rgba(${s.c},0)`);
             ctx.beginPath(); ctx.arc(p.x,p.y,p.r*2.5,0,Math.PI*2); ctx.fillStyle=pg; ctx.fill();
         }
     }
+
     function animate() {
         ctx.clearRect(0,0,canvas.width,canvas.height);
         for (const s of bgStars) {
-            ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fillStyle=`rgba(200,215,255,${s.o})`; ctx.fill();
+            ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+            ctx.fillStyle=`rgba(200,215,255,${s.o})`; ctx.fill();
         }
-        if (Math.random()<.017) shootingStars.push(newStar());
-        for (let i=shootingStars.length-1;i>=0;i--) {
-            const s=shootingStars[i];
-            s.o+=s.fadeIn?.055:-.013; if(s.o>=1){s.o=1;s.fadeIn=false;}
-            drawStar(s); s.x+=s.speed; s.y+=s.speed*.55;
-            if(s.o<=0&&s.sparks.length===0) shootingStars.splice(i,1);
+        if (Math.random() < .017) shootingStars.push(newStar());
+        for (let i = shootingStars.length-1; i >= 0; i--) {
+            const s = shootingStars[i];
+            s.o += s.fadeIn ? .055 : -.013;
+            if (s.o >= 1) { s.o=1; s.fadeIn=false; }
+            drawStar(s);
+            s.x += s.speed; s.y += s.speed*.55;
+            if (s.o <= 0 && s.sparks.length === 0) shootingStars.splice(i,1);
         }
         requestAnimationFrame(animate);
     }
-    resize(); window.addEventListener('resize',resize); animate();
+    resize(); window.addEventListener('resize', resize); animate();
     </script>
 
 
