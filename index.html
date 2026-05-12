@@ -163,7 +163,7 @@
         }
         .about-block p { color: rgba(190, 210, 250, 0.8); }
 
-        /* ── skills ── */
+        /* ── skill badges (the little tags) ── */
         .skills-list {
             display: flex;
             flex-wrap: wrap;
@@ -182,6 +182,32 @@
         .skill:nth-child(3) { border-radius: 12px; }
         .skill:nth-child(5) { border-radius: 2px; }
         .skill:nth-child(7) { border-radius: 8px; }
+
+        /* ── skill bars ── */
+        .skillbar-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 24px;
+        }
+        .skillbar-name {
+            display: block;
+            font-size: 12px;
+            color: var(--ink-dim);
+            margin-bottom: 6px;
+        }
+        .skillbar-track {
+            background: rgba(180, 200, 240, 0.08);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            height: 8px;
+            width: 100%;
+        }
+        .skillbar-fill {
+            background: var(--lime);
+            border-radius: 999px;
+            height: 100%;
+        }
 
         /* ── project ── */
         .project {
@@ -343,6 +369,8 @@
                 <span class="divider-label">wat ik wil leren</span>
                 <div class="divider-line"></div>
             </div>
+
+            <!-- Skill badges -->
             <div class="skills-list">
                 <span class="skill">HTML</span>
                 <span class="skill">CSS</span>
@@ -352,6 +380,58 @@
                 <span class="skill">C++</span>
                 <span class="skill">C#</span>
                 <span class="skill">SQL</span>
+            </div>
+
+            <!-- Skill bars -->
+            <div class="skillbar-list">
+                <div class="skillbar-item">
+                    <span class="skillbar-name">HTML</span>
+                    <div class="skillbar-track">
+                        <div class="skillbar-fill" style="width: 25%;"></div>
+                    </div>
+                </div>
+                <div class="skillbar-item">
+                    <span class="skillbar-name">CSS</span>
+                    <div class="skillbar-track">
+                        <div class="skillbar-fill" style="width: 10%;"></div>
+                    </div>
+                </div>
+                <div class="skillbar-item">
+                    <span class="skillbar-name">JavaScript</span>
+                    <div class="skillbar-track">
+                        <div class="skillbar-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="skillbar-item">
+                    <span class="skillbar-name">Python</span>
+                    <div class="skillbar-track">
+                        <div class="skillbar-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="skillbar-item">
+                    <span class="skillbar-name">Lua</span>
+                    <div class="skillbar-track">
+                        <div class="skillbar-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="skillbar-item">
+                    <span class="skillbar-name">C++</span>
+                    <div class="skillbar-track">
+                        <div class="skillbar-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="skillbar-item">
+                    <span class="skillbar-name">C#</span>
+                    <div class="skillbar-track">
+                        <div class="skillbar-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="skillbar-item">
+                    <span class="skillbar-name">SQL</span>
+                    <div class="skillbar-track">
+                        <div class="skillbar-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
             </div>
         </section>
 

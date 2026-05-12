@@ -112,3 +112,26 @@ button:active {
     transform: translateY(0px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
+
+.skill {
+    margin: 12px 0;
+}
+
+.skill-name {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+.skill-bar {
+  background-color: #e0e0e0;
+  border-radius: 999px;
+  height: 12px;
+  width: 100%;
+}
+
+.skill-fill {
+  background-color: #4f46e5;
+  border-radius: 999px;
+  height: 100%;
+}
