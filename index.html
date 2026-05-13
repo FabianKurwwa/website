@@ -3,7 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fabian.portfolio</title>
+    <title>Fabian — Software Developer in wording</title>
+
+    <meta name="description" content="Portfolio van Fabian. 19 jaar, Terneuzen. Bezig met Software Development op Scalda. Ik leer hoe dingen worden gemaakt.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Fabian — Software Developer in wording">
+    <meta property="og:description" content="19 jaar, Terneuzen. Bezig met Software Development op Scalda. Ik leer hoe dingen worden gemaakt.">
+    <meta property="og:image" content="images/wp5569646.jpg">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Fabian — Software Developer in wording">
+    <meta name="twitter:description" content="19 jaar, Terneuzen. Bezig met Software Development op Scalda. Ik leer hoe dingen worden gemaakt.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -77,6 +88,20 @@
             font-size: 12px; transition: color .2s;
         }
         .topbar-links a:hover { color: var(--ink); }
+
+        #taal-knop {
+            background: transparent;
+            border: 1px solid #d4e0f7;
+            color: #d4e0f7;
+            padding: 4px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        #taal-knop:hover {
+            background: rgba(212, 224, 247, 0.1);
+        }
 
         .hero { margin-bottom: 96px; }
         .hero h1 {
@@ -190,79 +215,80 @@
         <header class="topbar">
             <span class="topbar-name">fabian.dev</span>
             <nav class="topbar-links">
-                <a href="#over">over mij</a>
-                <a href="#projecten">projecten</a>
+                <a href="#over" id="nav-over">over mij</a>
+                <a href="#projecten" id="nav-projecten">projecten</a>
                 <a href="#cv">cv</a>
                 <a href="https://github.com/FabianKurwwa" target="_blank">github ↗</a>
             </nav>
+            <button id="taal-knop" onclick="taalWisselen()">EN</button>
         </header>
 
         <section class="hero reveal">
             <h1>Fabian</h1>
-            <p class="hero-sub">
+            <p class="hero-sub" id="hero-sub">
                 19 jaar, Terneuzen. Bezig met Software Development op Scalda.<br>
                 Ik leer hoe dingen worden gemaakt.
             </p>
-            <p class="day-counter">dag <span id="day-count"></span> van mijn coding journey</p>
+            <p class="day-counter"><span id="day-prefix">dag</span> <span id="day-count"></span> <span id="day-suffix">van mijn coding journey</span></p>
         </section>
 
         <section id="over" class="section reveal">
-            <h2>over mij</h2>
+            <h2 id="sectie-over">over mij</h2>
             <div class="about-block">
-                <p>
+                <p id="over-tekst">
                     Mijn hobby is gamen — gewoon lekker samen met vrienden spelen. Maar steeds vaker ben ik meer geïnteresseerd in hoe games en apps eigenlijk <em>gemaakt</em> worden. Dat is ook waarom ik begonnen ben met coderen: ik wil gewoon mijn eigen dingen bouwen.
                 </p>
             </div>
         </section>
 
         <section class="section reveal">
-            <h2>wat ik leer</h2>
+            <h2 id="sectie-leer">wat ik leer</h2>
             <div class="skill-status-list">
                 <div class="skill-row">
                     <span class="skill-row-name">HTML</span>
                     <span class="skill-row-dots"></span>
-                    <span class="skill-row-status active">aan het leren</span>
+                    <span class="skill-row-status active" id="status-html">aan het leren</span>
                 </div>
                 <div class="skill-row">
                     <span class="skill-row-name">CSS</span>
                     <span class="skill-row-dots"></span>
-                    <span class="skill-row-status active">net begonnen</span>
+                    <span class="skill-row-status active" id="status-css">net begonnen</span>
                 </div>
                 <div class="skill-row">
                     <span class="skill-row-name">JavaScript</span>
                     <span class="skill-row-dots"></span>
-                    <span class="skill-row-status">volgende</span>
+                    <span class="skill-row-status" id="status-js">volgende</span>
                 </div>
                 <div class="skill-row">
                     <span class="skill-row-name">Python</span>
                     <span class="skill-row-dots"></span>
-                    <span class="skill-row-status">wil ik leren</span>
+                    <span class="skill-row-status" id="status-python">wil ik leren</span>
                 </div>
                 <div class="skill-row">
                     <span class="skill-row-name">Lua</span>
                     <span class="skill-row-dots"></span>
-                    <span class="skill-row-status">wil ik leren</span>
+                    <span class="skill-row-status" id="status-lua">wil ik leren</span>
                 </div>
                 <div class="skill-row">
                     <span class="skill-row-name">C++</span>
                     <span class="skill-row-dots"></span>
-                    <span class="skill-row-status">later</span>
+                    <span class="skill-row-status" id="status-cpp">later</span>
                 </div>
                 <div class="skill-row">
                     <span class="skill-row-name">C#</span>
                     <span class="skill-row-dots"></span>
-                    <span class="skill-row-status">later</span>
+                    <span class="skill-row-status" id="status-csharp">later</span>
                 </div>
                 <div class="skill-row">
                     <span class="skill-row-name">SQL</span>
                     <span class="skill-row-dots"></span>
-                    <span class="skill-row-status">later</span>
+                    <span class="skill-row-status" id="status-sql">later</span>
                 </div>
             </div>
         </section>
 
         <section class="section reveal">
-            <h2>wat ik gebruik</h2>
+            <h2 id="sectie-gebruik">wat ik gebruik</h2>
             <div class="skill-status-list">
                 <div class="skill-row">
                     <span class="skill-row-name">VS Code</span>
@@ -272,32 +298,32 @@
                 <div class="skill-row">
                     <span class="skill-row-name">GitHub</span>
                     <span class="skill-row-dots"></span>
-                    <span class="skill-row-status active">versie beheer</span>
+                    <span class="skill-row-status active" id="status-github">versie beheer</span>
                 </div>
             </div>
         </section>
 
         <section id="projecten" class="section reveal">
-            <h2>projecten</h2>
-            <p>Nog niks af, maar er komt wat aan.</p>
+            <h2 id="sectie-projecten">projecten</h2>
+            <p id="project-intro">Nog niks af, maar er komt wat aan.</p>
             <div class="project">
                 <div class="project-status">
                     <span class="status-dot"></span> work in progress
                 </div>
                 <h3>Eerste project</h3>
-                <p>Ik ben net begonnen en werk aan mijn eerste ding. Geen idee wat het precies wordt nog, maar het komt eraan.</p>
+                <p id="project-desc">Ik ben net begonnen en werk aan mijn eerste ding. Geen idee wat het precies wordt nog, maar het komt eraan.</p>
                 <div class="project-tags">
-                    <span class="project-tag">binnenkort</span>
-                    <span class="project-tag">in ontwikkeling</span>
+                    <span class="project-tag" id="project-tag1">binnenkort</span>
+                    <span class="project-tag" id="project-tag2">in ontwikkeling</span>
                 </div>
             </div>
         </section>
 
         <section id="cv" class="section reveal">
-            <h2>cv</h2>
-            <p>Staat er alles in wat ik tot nu toe heb gedaan.</p>
+            <h2 id="sectie-cv">cv</h2>
+            <p id="cv-tekst">Staat er alles in wat ik tot nu toe heb gedaan.</p>
             <div class="cv-row">
-                <a href="cv.pdf" class="cv-link">↓ cv downloaden</a>
+                <a href="cv.pdf" class="cv-link" id="cv-link">↓ cv downloaden</a>
             </div>
         </section>
 
@@ -494,5 +520,88 @@
         el.addEventListener('mouseleave', () => dot.classList.remove('hover'));
     });
     </script>
+
+    <script>
+    // taal wisselen tussen NL en EN
+    let taal = 'nl';
+
+    function taalWisselen() {
+        if (taal === 'nl') {
+            taal = 'en';
+            document.getElementById('taal-knop').textContent = 'NL';
+
+            document.getElementById('nav-over').textContent = 'about me';
+            document.getElementById('nav-projecten').textContent = 'projects';
+
+            document.getElementById('hero-sub').innerHTML = '19 years old, Terneuzen. Studying Software Development at Scalda.<br>I\'m learning how things are made.';
+            document.getElementById('day-prefix').textContent = 'day';
+            document.getElementById('day-suffix').textContent = 'of my coding journey';
+
+            document.getElementById('sectie-over').textContent = 'about me';
+            document.getElementById('over-tekst').textContent = 'My hobby is gaming — just playing games with friends. But more and more I\'m interested in how games and apps are actually made. That\'s also why I started coding: I just want to build my own things.';
+
+            document.getElementById('sectie-leer').textContent = 'what i\'m learning';
+            document.getElementById('status-html').textContent = 'learning';
+            document.getElementById('status-css').textContent = 'just started';
+            document.getElementById('status-js').textContent = 'next';
+            document.getElementById('status-python').textContent = 'want to learn';
+            document.getElementById('status-lua').textContent = 'want to learn';
+            document.getElementById('status-cpp').textContent = 'later';
+            document.getElementById('status-csharp').textContent = 'later';
+            document.getElementById('status-sql').textContent = 'later';
+
+            document.getElementById('sectie-gebruik').textContent = 'what i use';
+            document.getElementById('status-github').textContent = 'version control';
+
+            document.getElementById('sectie-projecten').textContent = 'projects';
+            document.getElementById('project-intro').textContent = 'Nothing finished yet, but something\'s coming.';
+            document.getElementById('project-desc').textContent = 'I just started and I\'m working on my first thing. No idea what it\'ll be yet, but it\'s coming.';
+            document.getElementById('project-tag1').textContent = 'coming soon';
+            document.getElementById('project-tag2').textContent = 'in development';
+
+            document.getElementById('sectie-cv').textContent = 'cv';
+            document.getElementById('cv-tekst').textContent = 'It has everything I\'ve done so far.';
+            document.getElementById('cv-link').textContent = '↓ download cv';
+
+        } else {
+            taal = 'nl';
+            document.getElementById('taal-knop').textContent = 'EN';
+
+            document.getElementById('nav-over').textContent = 'over mij';
+            document.getElementById('nav-projecten').textContent = 'projecten';
+
+            document.getElementById('hero-sub').innerHTML = '19 jaar, Terneuzen. Bezig met Software Development op Scalda.<br>Ik leer hoe dingen worden gemaakt.';
+            document.getElementById('day-prefix').textContent = 'dag';
+            document.getElementById('day-suffix').textContent = 'van mijn coding journey';
+
+            document.getElementById('sectie-over').textContent = 'over mij';
+            document.getElementById('over-tekst').textContent = 'Mijn hobby is gamen — gewoon lekker samen met vrienden spelen. Maar steeds vaker ben ik meer geïnteresseerd in hoe games en apps eigenlijk gemaakt worden. Dat is ook waarom ik begonnen ben met coderen: ik wil gewoon mijn eigen dingen bouwen.';
+
+            document.getElementById('sectie-leer').textContent = 'wat ik leer';
+            document.getElementById('status-html').textContent = 'aan het leren';
+            document.getElementById('status-css').textContent = 'net begonnen';
+            document.getElementById('status-js').textContent = 'volgende';
+            document.getElementById('status-python').textContent = 'wil ik leren';
+            document.getElementById('status-lua').textContent = 'wil ik leren';
+            document.getElementById('status-cpp').textContent = 'later';
+            document.getElementById('status-csharp').textContent = 'later';
+            document.getElementById('status-sql').textContent = 'later';
+
+            document.getElementById('sectie-gebruik').textContent = 'wat ik gebruik';
+            document.getElementById('status-github').textContent = 'versie beheer';
+
+            document.getElementById('sectie-projecten').textContent = 'projecten';
+            document.getElementById('project-intro').textContent = 'Nog niks af, maar er komt wat aan.';
+            document.getElementById('project-desc').textContent = 'Ik ben net begonnen en werk aan mijn eerste ding. Geen idee wat het precies wordt nog, maar het komt eraan.';
+            document.getElementById('project-tag1').textContent = 'binnenkort';
+            document.getElementById('project-tag2').textContent = 'in ontwikkeling';
+
+            document.getElementById('sectie-cv').textContent = 'cv';
+            document.getElementById('cv-tekst').textContent = 'Staat er alles in wat ik tot nu toe heb gedaan.';
+            document.getElementById('cv-link').textContent = '↓ cv downloaden';
+        }
+    }
+    </script>
+
 </body>
 </html>
