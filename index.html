@@ -142,7 +142,7 @@
             position: relative;
         }
 
-        /* lijntje onder nav link bij hover — dit had ik eerst niet */
+        /* lijntje onder nav link bij hover */
         .topbar-links a::after {
             content: '';
             position: absolute;
@@ -233,6 +233,18 @@
             margin-bottom: 80px;
         }
 
+        /* iets meer ruimte voor de projecten sectie, zet het apart */
+        .section-projecten {
+            margin-top: 24px;
+            margin-bottom: 80px;
+        }
+
+        /* wat ik gebruik staat dicht bij wat ik leer, hoort erbij */
+        .section-gebruik {
+            margin-top: -20px;
+            margin-bottom: 96px;
+        }
+
         .section h2 {
             font-family: 'Instrument Serif', serif;
             font-size: 20px;
@@ -312,6 +324,26 @@
             color: #c8ff57;
         }
 
+        /* scheidingslijn tussen actieve skills en toekomstige */
+        .skill-divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 16px 0 6px;
+        }
+
+        .skill-divider-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(180, 200, 240, 0.08);
+        }
+
+        .skill-divider-label {
+            font-size: 10px;
+            color: rgba(180, 200, 240, 0.2);
+            letter-spacing: 0.06em;
+        }
+
         /* tools sectie anders dan de skills, chippen ipv lijsten */
         .tools-block {
             display: flex;
@@ -344,11 +376,14 @@
             flex-shrink: 0;
         }
 
-        /* projecten */
+        /* project kaartje — beetje meer als een echte card nu */
         .project {
-            padding-left: 18px;
-            border-left: 1px solid rgba(180, 200, 240, 0.1);
+            padding: 18px 20px;
             margin-top: 24px;
+            border-left: 1px solid rgba(180, 200, 240, 0.1);
+            border-top: 1px solid rgba(200, 255, 87, 0.18);
+            background: rgba(200, 255, 87, 0.025);
+            border-radius: 0 4px 4px 0;
         }
 
         .project-status {
@@ -471,11 +506,20 @@
             transform: none;
         }
 
+        /* mobiel — nav links verbergen, te krap anders */
         @media (max-width: 480px) {
             .page { padding: 48px 20px 80px; }
             .topbar { margin-bottom: 56px; }
-            .topbar-links { gap: 12px; }
             .hero { margin-bottom: 60px; }
+
+            /* sectie links weghalen op mobiel, je scrollt toch */
+            .topbar-links a[href^="#"] {
+                display: none;
+            }
+
+            .section-gebruik {
+                margin-top: 0;
+            }
         }
     </style>
 </head>
@@ -522,6 +566,8 @@
         <section class="section reveal">
             <h2><span class="section-num">02 —</span><span id="sectie-leer">wat ik leer</span></h2>
             <div class="skill-status-list">
+
+                <!-- actief bezig -->
                 <div class="skill-row">
                     <span class="skill-row-name">HTML</span>
                     <span class="skill-row-dots"></span>
@@ -537,6 +583,15 @@
                     <span class="skill-row-dots"></span>
                     <span class="skill-row-status" id="status-js">volgende</span>
                 </div>
+
+                <!-- scheidingslijn tussen nu en straks -->
+                <div class="skill-divider">
+                    <span class="skill-divider-line"></span>
+                    <span class="skill-divider-label" id="skill-divider-label">straks</span>
+                    <span class="skill-divider-line"></span>
+                </div>
+
+                <!-- toekomstig -->
                 <div class="skill-row">
                     <span class="skill-row-name">Python</span>
                     <span class="skill-row-dots"></span>
@@ -562,10 +617,12 @@
                     <span class="skill-row-dots"></span>
                     <span class="skill-row-status" id="status-sql">later</span>
                 </div>
+
             </div>
         </section>
 
-        <section class="section reveal">
+        <!-- dicht bij wat ik leer, vandaar de kleinere margin -->
+        <section class="section section-gebruik reveal">
             <h2><span class="section-num">03 —</span><span id="sectie-gebruik">wat ik gebruik</span></h2>
             <div class="tools-block">
                 <span class="tool-chip"><span class="tool-chip-dot"></span>VS Code</span>
@@ -573,7 +630,7 @@
             </div>
         </section>
 
-        <section id="projecten" class="section reveal">
+        <section id="projecten" class="section section-projecten reveal">
             <h2><span class="section-num">04 —</span><span id="sectie-projecten">projecten</span></h2>
             <p id="project-intro">Nog niks af, maar er komt wat aan.</p>
             <div class="project">
@@ -886,6 +943,7 @@
             document.getElementById('over-tekst').textContent = 'My hobby is gaming — just playing games with friends. But more and more I\'m interested in how games and apps are actually made. That\'s also why I started coding: I just want to build my own things.';
 
             document.getElementById('sectie-leer').textContent = 'what i\'m learning';
+            document.getElementById('skill-divider-label').textContent = 'upcoming';
             document.getElementById('status-html').textContent = 'learning';
             document.getElementById('status-css').textContent = 'just started';
             document.getElementById('status-js').textContent = 'next';
@@ -924,6 +982,7 @@
             document.getElementById('over-tekst').textContent = 'Mijn hobby is gamen — gewoon lekker samen met vrienden spelen. Maar steeds vaker ben ik meer geïnteresseerd in hoe games en apps eigenlijk gemaakt worden. Dat is ook waarom ik begonnen ben met coderen: ik wil gewoon mijn eigen dingen bouwen.';
 
             document.getElementById('sectie-leer').textContent = 'wat ik leer';
+            document.getElementById('skill-divider-label').textContent = 'straks';
             document.getElementById('status-html').textContent = 'aan het leren';
             document.getElementById('status-css').textContent = 'net begonnen';
             document.getElementById('status-js').textContent = 'volgende';
