@@ -8,7 +8,11 @@
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
 </head>
 <body>
+    <a href="../index.html" class="back-btn">← terug</a>
     <h1>Mijn game collectie</h1>
+    <p id="teller"></p>
+
+    <input type="text" id="zoek" placeholder="Zoek een game..." oninput="zoekGames()">
 
     <div class="grid">
 
@@ -145,5 +149,39 @@
         </div>
 
     </div>
+
+    <script>
+    var alleKaarten = document.querySelectorAll('.card');
+    var totaal = alleKaarten.length;
+
+    function updateTeller(zichtbaar) {
+        var teller = document.getElementById('teller');
+        if (zichtbaar === totaal) {
+            teller.textContent = totaal + ' games in de collectie';
+        } else {
+            teller.textContent = zichtbaar + ' van ' + totaal + ' games gevonden';
+        }
+    }
+
+    function zoekGames() {
+        var input = document.getElementById('zoek').value.toLowerCase();
+        var zichtbaar = 0;
+
+        alleKaarten.forEach(function(kaart) {
+            var naam = kaart.querySelector('h2').textContent.toLowerCase();
+            if (naam.includes(input)) {
+                kaart.style.display = 'block';
+                zichtbaar++;
+            } else {
+                kaart.style.display = 'none';
+            }
+        });
+
+        updateTeller(zichtbaar);
+    }
+
+    // teller instellen bij het laden van de pagina
+    updateTeller(totaal);
+    </script>
 </body>
 </html>
