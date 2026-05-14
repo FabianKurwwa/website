@@ -5,6 +5,14 @@ body {
     padding: 30px;
 }
 
+/* bovenkant */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 .back-btn {
     display: inline-block;
     color: white;
@@ -19,6 +27,23 @@ body {
 .back-btn:hover {
     background-color: white;
     color: #1a1a2e;
+}
+
+/* taal knop */
+#taal-knop {
+    background: transparent;
+    border: 1px solid #444;
+    color: #aaa;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+}
+
+#taal-knop:hover {
+    border-color: white;
+    color: white;
 }
 
 h1 {
