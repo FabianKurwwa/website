@@ -14,6 +14,14 @@
 
     <input type="text" id="zoek" placeholder="Zoek een game..." oninput="zoekGames()">
 
+    <!-- filter knoppen -->
+    <div class="filters">
+        <button class="filter-btn actief" onclick="filterStatus('alles')">Alles</button>
+        <button class="filter-btn" onclick="filterStatus('compleet')">Compleet</button>
+        <button class="filter-btn" onclick="filterStatus('spelen')">Bezig met spelen</button>
+        <button class="filter-btn" onclick="filterStatus('bezig')">Nog niet begonnen</button>
+    </div>
+
     <div class="grid">
 
         <!-- game #1 -->
@@ -148,11 +156,22 @@
             </div>
         </div>
 
-    </div>
+        <!-- game #13 -->
+        <div class="card">
+            <img class="cover" src="images/apexlegends.jpg" alt="Game cover">
+            <img class="gif" src="images/gifs/apexlegends.gif" alt="Game gif">
+            <div class="info">
+                <h2>Apex Legends</h2>
+                <p class="genre">Battle royale, first-person shooter</p>
+                <span class="status spelen">Bezig met spelen</span>
+            </div>
+        </div>
+
 
     <script>
     var alleKaarten = document.querySelectorAll('.card');
     var totaal = alleKaarten.length;
+    var huidigFilter = 'alles';
 
     function updateTeller(zichtbaar) {
         var teller = document.getElementById('teller');
@@ -163,13 +182,28 @@
         }
     }
 
+    function filterStatus(status) {
+        huidigFilter = status;
+
+        // actieve knop bijhouden
+        document.querySelectorAll('.filter-btn').forEach(function(btn) {
+            btn.classList.remove('actief');
+        });
+        event.target.classList.add('actief');
+
+        zoekGames();
+    }
+
     function zoekGames() {
         var input = document.getElementById('zoek').value.toLowerCase();
         var zichtbaar = 0;
 
         alleKaarten.forEach(function(kaart) {
             var naam = kaart.querySelector('h2').textContent.toLowerCase();
-            if (naam.includes(input)) {
+            var statusEl = kaart.querySelector('.status');
+            var heeftStatus = huidigFilter === 'alles' || (statusEl && statusEl.classList.contains(huidigFilter));
+
+            if (naam.includes(input) && heeftStatus) {
                 kaart.style.display = 'block';
                 zichtbaar++;
             } else {

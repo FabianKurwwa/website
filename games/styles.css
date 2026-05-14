@@ -37,6 +37,37 @@ h1 {
     display: inline-block;
 }
 
+/* filter knoppen */
+.filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background-color: #16213e;
+    color: #aaa;
+    border: 1px solid #444;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+}
+
+.filter-btn:hover {
+    border-color: white;
+    color: white;
+}
+
+.filter-btn.actief {
+    background-color: white;
+    color: #1a1a2e;
+    border-color: white;
+    font-weight: bold;
+}
+
 /* zoekbalk */
 #zoek {
     display: block;
@@ -119,6 +150,11 @@ h1 {
 
 .status.bezig {
     background-color: #ffd166;
+    color: #000;
+}
+
+.status.spelen {
+    background-color: #60a5fa;
     color: #000;
 }
 
