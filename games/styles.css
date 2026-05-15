@@ -235,6 +235,63 @@ h1 {
     .card { transition: none; }
 }
 
+@media (max-width: 600px) {
+    body {
+        padding: 14px;
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: 12px;
+    }
+
+    #zoek {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .filters {
+        gap: 6px;
+    }
+
+    .filter-btn {
+        font-size: 11px;
+        padding: 5px 10px;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .card img {
+        height: 130px;
+    }
+
+    .info h2 {
+        font-size: 12px;
+    }
+
+    .genre {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 360px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card img {
+        height: 160px;
+    }
+}
+
 /* van https://www.sliderrevolution.com/resources/css-animated-background/ */
 #stars {
   width: 1px;
