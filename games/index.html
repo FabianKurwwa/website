@@ -6,8 +6,15 @@
     <title>Game collectie</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
+
+    <!-- van https://www.sliderrevolution.com/resources/css-animated-background/ -->
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+
 </head>
 <body>
+<div id='stars'></div>
+<div id='stars2'></div>
+<div id='stars3'></div>
 
     <!-- bovenkant met terug knop en taal knop -->
     <div class="topbar">
@@ -173,6 +180,61 @@
             </div>
         </div>
 
+        <!-- game #14 -->
+         <div class="card">
+            <img class="cover" src="images/darksouls3.jpg" alt="Game cover">
+            <img class="gif" src="images/gifs/darksouls3.gif" alt="Game gif">
+            <div class="info">
+                <h2>Dark Souls 3</h2>
+                <p class="genre">Action RPG</p>
+                <span class="status compleet">Compleet</span>
+            </div>
+         </div>
+
+         <!-- game #15 -->
+         <div class="card">
+            <img class="cover" src="images/infamous2.jpg" alt="Game cover">
+            <img class="gif" src="images/gifs/infamous2.gif" alt="Game gif">
+            <div class="info">
+                <h2>Infamous 2</h2>
+                <p class="genre">Action-adventure</p>
+                <span class="status compleet">Compleet</span>
+            </div>
+         </div>
+
+         <!-- game #16 -->
+          <div class="card">
+            <img class="cover" src="images/infamous_ss.jpg" alt="Game Cover">
+            <img class="gif" src="images/gifs/infamous_ss.gif" alt="Game gif">
+            <div class="info">
+                <h2>Infamous: Second Son</h2>
+                <p class="genre">Action-adventure</p>
+                <span class="status compleet">Compleet</span>
+            </div>
+          </div>
+
+          <!-- game #17 -->
+          <div class="card">
+            <img class="cover" src="images/justcause.jpg" alt="Game Cover">
+            <img class="gif" src="images/gifs/justcause.gif" alt="Game gif">
+            <div class="info">
+                <h2>Just Cause 3</h2>
+                <p class="genre">Action-adventure, open world</p>
+                <span class="status compleet">Compleet</span>
+            </div>
+          </div>
+
+          <!-- game #18 -->
+          <div class="card">
+            <img class="cover" src="images/crysis.jpg" alt="Game Cover">
+            <img class="gif" src="images/gifs/crysis.gif" alt="Game gif">
+            <div class="info">
+                <h2>Crysis</h2>
+                <p class="genre">First-person shooter</p>
+                <span class="status compleet">Compleet</span>
+            </div>
+          </div>
+
     </div> <!-- einde grid -->
 
     <script>
@@ -181,7 +243,7 @@
     var huidigFilter = 'alles';
     var taal = 'nl';
 
-    // teksten per taal
+    
     var teksten = {
         nl: {
             titel: 'Mijn game collectie',
