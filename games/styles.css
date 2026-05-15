@@ -93,9 +93,9 @@ h1 {
 }
 
 .filter-btn.actief {
-    background-color: white;
-    color: #1a1a2e;
-    border-color: white;
+    background-color: #c8ff57;
+    color: #0a0e17;
+    border-color: #c8ff57;
     font-weight: bold;
 }
 
@@ -226,7 +226,13 @@ h1 {
 }
 
 .card:hover {
-    box-shadow: 0 0 20px rgba(80, 100, 255, 0.5), 0 0 40px rgba(120, 40, 220, 0.3);
+    box-shadow: 0 0 20px rgba(200, 255, 87, 0.25), 0 0 40px rgba(200, 255, 87, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #stars, #stars2, #stars3 { animation: none; }
+    .card:hover::before { animation: none; opacity: 0; }
+    .card { transition: none; }
 }
 
 /* van https://www.sliderrevolution.com/resources/css-animated-background/ */

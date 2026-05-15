@@ -645,6 +645,7 @@
                 <div class="project-tags">
                     <span class="project-tag">HTML</span>
                     <span class="project-tag">CSS</span>
+                    <span class="project-tag" id="project-tag1">binnenkort</span>
                     <span class="project-tag" id="project-tag2">in ontwikkeling</span>
                 </div>
             </div>
@@ -697,7 +698,7 @@
         var epic = Math.random() < 0.07;
         var big  = !epic && Math.random() < 0.18;
         var angle = Math.PI / 4 + (Math.random() - .5) * .5;
-        var speed = epic ? Math.random()*3+2 : big ? Math.random()*5+5 : Math.random()*7+3;
+        var speed = epic ? Math.random()*2+1.5 : big ? Math.random()*3+3.5 : Math.random()*5+2;
         return {
             x: Math.random() * canvas.width * 1.2 - canvas.width * .1,
             y: Math.random() * canvas.height * .55,
