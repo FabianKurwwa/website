@@ -407,6 +407,18 @@
             animation: pulse 1.4s ease infinite;
         }
 
+        /* vaste stip als iets live is */
+        .status-dot-live {
+            width: 5px;
+            height: 5px;
+            background: #c8ff57;
+            border-radius: 50%;
+        }
+
+        .project-status-live {
+            color: #c8ff57;
+        }
+
         @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: .4; transform: scale(.6); }
@@ -645,8 +657,18 @@
                 <div class="project-tags">
                     <span class="project-tag">HTML</span>
                     <span class="project-tag">CSS</span>
-                    <span class="project-tag" id="project-tag1">binnenkort</span>
-                    <span class="project-tag" id="project-tag2">in ontwikkeling</span>
+                </div>
+            </div>
+            <div class="project">
+                <div class="project-status">
+                    <span class="status-dot"></span> work in progress
+                </div>
+                <h3 id="project-portfolio-naam">Portfolio</h3>
+                <p id="project-portfolio-desc">De site die je nu bekijkt. Begonnen als oefening, nu echt een project geworden.</p>
+                <div class="project-tags">
+                    <span class="project-tag">HTML</span>
+                    <span class="project-tag">CSS</span>
+                    <span class="project-tag">JS</span>
                 </div>
             </div>
         </section>
@@ -964,8 +986,8 @@
             document.getElementById('project-intro').textContent = 'Nothing finished yet, but I\'m working on it.';
             document.getElementById('project-naam').textContent = 'Game Collection';
             document.getElementById('project-desc').textContent = 'An overview page of games I\'ve played or want to play. Made with HTML and CSS.';
-            document.getElementById('project-tag1').textContent = 'coming soon';
-            document.getElementById('project-tag2').textContent = 'in development';
+            document.getElementById('project-portfolio-naam').textContent = 'Portfolio';
+            document.getElementById('project-portfolio-desc').textContent = 'The site you\'re looking at. Started as practice, turned into an actual project.';
 
             document.getElementById('sectie-cv').textContent = 'cv';
             document.getElementById('cv-tekst').textContent = 'It has everything I\'ve done so far.';
@@ -1004,8 +1026,8 @@
             document.getElementById('project-intro').textContent = 'Nog niks af, maar er wordt aan gewerkt.';
             document.getElementById('project-naam').textContent = 'Game Collectie';
             document.getElementById('project-desc').textContent = 'Een overzichtspagina van games die ik gespeeld heb of wil spelen. Gemaakt met HTML en CSS.';
-            document.getElementById('project-tag1').textContent = 'binnenkort';
-            document.getElementById('project-tag2').textContent = 'in ontwikkeling';
+            document.getElementById('project-portfolio-naam').textContent = 'Portfolio';
+            document.getElementById('project-portfolio-desc').textContent = 'De site die je nu bekijkt. Begonnen als oefening, nu echt een project geworden.';
 
             document.getElementById('sectie-cv').textContent = 'cv';
             document.getElementById('cv-tekst').textContent = 'Staat er alles in wat ik tot nu toe heb gedaan.';
